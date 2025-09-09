@@ -48,11 +48,31 @@ public class Main {
         }
 
         Player current = player1;
+        Random random = new Random();
 
         while (!game.isGameOver()) {
             game.printBoard();
             System.out.println("Beurt: " + current);
             // hier moeten de keuzes komen
+            boolean moveDone = false;
+            while (!moveDone) {
+                if (current instanceof AI){
+                    int  row = random.nextInt(3);
+                    int col = random.nextInt(3);
+                    moveDone = game.makeMove(current, row, col);
+                } else {
+                    System.out.println("Voer rij (0-2) in:");
+                    int row = scanner.nextInt();
+                    System.out.println("Voer rij (0-2) in:");
+                    int col = scanner.nextInt();
+                    moveDone = game.makeMove(current, row, col);
+                    if (!moveDone) {
+                        System.out.println("ongeldige zet, probeer opnieuw!");
+                    }
+                }
+            }
+
+            current  = (current == player1) ? player1 : player2;
         }
 
         game.printBoard();
