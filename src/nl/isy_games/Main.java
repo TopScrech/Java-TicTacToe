@@ -23,12 +23,15 @@ public class Main {
             scanner.next(); // Continue
         }
 
-        TicTacToeGame game = new TicTacToeGame();
+        BoardGame game = new TicTacToeGame();
+        Player player1, player2;
 
         if (keuze == 1) {
-            System.out.println("Speler X en Computer O");
+            player1 = new Player("X");
+            player2 = new AI("O");
         } else {
-            System.out.println("Computer X en Computer O");
+            player1 = new AI("X");
+            player2 = new AI("O");
         }
     }
-}
+
