@@ -49,7 +49,20 @@ public class Main {
 
         Player current = player1;
 
-        ((TicTacToeGame) game).printBoard();
-//        Player winner = game.getWinner();
+        while (!game.isGameOver()) {
+            game.printBoard();
+            System.out.println("Beurt: " + current);
+            // hier moeten de keuzes komen
+        }
+
+        game.printBoard();
+        Player winner = game.getWinner();
+        if (winner != null) {
+            System.out.println("Winnaar: " + winner);
+        } else {
+            System.out.println("Gelijkspel!");
+        }
+
+        scanner.close();
     }
 }
