@@ -19,7 +19,8 @@ public class Main {
         if (keuzeSpel == 1) {
             game = new TicTacToeGame();
         } else {
-//            game = new gaming.games.LaterSpel();
+            System.out.println("Dit spel is nog niet beschikbaar.");
+            return;
         }
 
         System.out.println("Welkom bij TicTacToe!");
@@ -35,7 +36,7 @@ public class Main {
             keuze = 1;
             scanner.next(); // Continue
         }
-        
+
         Player player1, player2;
 
         if (keuze == 1) {
@@ -45,5 +46,10 @@ public class Main {
             player1 = new AI();
             player2 = new AI();
         }
+
+        Player current = player1;
+
+        ((TicTacToeGame) game).printBoard();
+//        Player winner = game.getWinner();
     }
 }
