@@ -1,5 +1,4 @@
 package nl.isy_games;
-package classes;
 
 public class TicTacToeGame extends BoardGame {
     private String[][] board;
