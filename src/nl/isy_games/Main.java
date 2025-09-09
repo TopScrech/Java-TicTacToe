@@ -35,16 +35,15 @@ public class Main {
             keuze = 1;
             scanner.next(); // Continue
         }
-
-        BoardGame game = new TicTacToeGame();
+        
         Player player1, player2;
 
         if (keuze == 1) {
             player1 = new Player("X");
-            player2 = new AI("O");
+            player2 = new AI();
         } else {
-            player1 = new AI("X");
-            player2 = new AI("O");
+            player1 = new AI();
+            player2 = new AI();
         }
     }
 }
