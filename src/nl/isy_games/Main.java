@@ -12,6 +12,15 @@ public class Main {
         System.out.println("Kies modus:");
         System.out.println("1. Mens vs Computer");
         System.out.println("2. Computer vs Computer");
+        int keuze = scanner.nextInt();
+
+        TicTacToeGame game = new TicTacToeGame();
+
+        if (keuze == 1) {
+            System.out.println("Speler X en Computer O");
+        } else {
+            System.out.println("Computer X en Computer O");
+        }
 
         AI ai = new AI();
         System.out.print(ai.name);
