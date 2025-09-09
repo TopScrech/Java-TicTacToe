@@ -13,7 +13,15 @@ public class Main {
         System.out.println("Kies modus:");
         System.out.println("1. Mens vs Computer");
         System.out.println("2. Computer vs Computer");
-        int keuze = scanner.nextInt();
+        int keuze;
+
+        if (scanner.hasNextInt()) {
+            keuze = scanner.nextInt();
+        } else {
+            System.out.println("Ongeldige invoer, standaard modus 1 gekozen");
+            keuze = 1;
+            scanner.next(); // Continue
+        }
 
         TicTacToeGame game = new TicTacToeGame();
 
@@ -22,8 +30,5 @@ public class Main {
         } else {
             System.out.println("Computer X en Computer O");
         }
-
-        AI ai = new AI();
-        System.out.print(ai.name);
     }
 }
