@@ -1,5 +1,16 @@
 package nl.isy_games;
+package classes;
 
 public class TicTacToeGame extends BoardGame {
+    private String[][] board;
+    private final int SIZE = 3;
 
+    public TicTacToeGame() {
+        board = new String[SIZE][SIZE];
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                board[i][j] = " ";
+            }
+        }
+    }
 }
