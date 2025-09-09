@@ -34,4 +34,4 @@ public class Main {
             player2 = new AI("O");
         }
     }
-
+}
