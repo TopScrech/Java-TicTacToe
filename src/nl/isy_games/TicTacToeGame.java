@@ -12,4 +12,14 @@ public class TicTacToeGame extends BoardGame {
             }
         }
     }
+
+    public Player getWinner() {
+        return null;
+    }
+
+    public void printBoard() {
+        for (int i = 0; i < SIZE; i++) {
+            System.out.println("| " + String.join(" | ", board[i]) + " |");
+        }
+    }
 }
