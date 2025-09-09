@@ -13,6 +13,21 @@ public class TicTacToeGame extends BoardGame {
         }
     }
 
+    public boolean makeMove(Player player, int row, int col) {
+        return true;
+    }
+
+    public boolean isGameOver() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (board[i][j] == "") {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public Player getWinner() {
         return null;
     }
