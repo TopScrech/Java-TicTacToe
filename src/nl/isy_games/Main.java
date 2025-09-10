@@ -48,31 +48,29 @@ public class Main {
         }
 
         Player current = player1;
-        Random random = new Random();
-
         while (!game.isGameOver()) {
             game.printBoard();
-            System.out.println("Beurt: " + current);
-            // hier moeten de keuzes komen
+            System.out.println("Beurt: " + current.getName());
             boolean moveDone = false;
+
             while (!moveDone) {
-                if (current instanceof AI){
-                    int  row = random.nextInt(3);
-                    int col = random.nextInt(3);
-                    moveDone = game.makeMove(current, row, col);
+                if (current instanceof AI) {
+                    int[] zet = ((AI) current).chooseMove(game);
+                    game.makeMove(current, zet[0], zet[1]); // zet uitvoeren
+                    System.out.println("Computer zet op: " + zet[0] + "," + zet[1]);
+                    moveDone = true;
                 } else {
                     System.out.println("Voer rij (0-2) in:");
                     int row = scanner.nextInt();
-                    System.out.println("Voer rij (0-2) in:");
+                    System.out.println("Voer kolom (0-2) in:");
                     int col = scanner.nextInt();
                     moveDone = game.makeMove(current, row, col);
                     if (!moveDone) {
-                        System.out.println("ongeldige zet, probeer opnieuw!");
+                        System.out.println("Ongeldige zet, probeer opnieuw!");
                     }
                 }
             }
-
-            current  = (current == player1) ? player1 : player2;
+            current = (current == player1) ? player2 : player1;
         }
 
         game.printBoard();
