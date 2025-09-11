@@ -1,5 +1,7 @@
 package nl.isy_games;
 
+import java.util.Random;
+
 public class AI extends Player {
     private Random random;
     public AI() {
