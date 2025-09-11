@@ -1,113 +1,187 @@
-package nl.isy_games;
-import java.util.Scanner;
+import classes.*;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
 public class Main {
+    private static TicTacToeGame game;
+    private static Player player1, player2, current;
+    private static JButton[][] buttons = new JButton[3][3];
+    private static JFrame frame;
+
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        Scanner scanner = new Scanner(System.in);
+        SwingUtilities.invokeLater(Main::showMainMenu);
+    }
+
+    private static void showMainMenu() {
+        JFrame mainMenu = new JFrame("Gaming Library");
+        mainMenu.setSize(400, 200);
+        mainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainMenu.setLayout(new GridLayout(3, 1, 10, 10));
+
+        JLabel label = new JLabel("Kies een spel:", SwingConstants.CENTER);
+        JButton ticTacToeButton = new JButton("1. TicTacToe");
+        JButton notAvailableButton = new JButton("2. Nog niet beschikbaar");
+
+        mainMenu.add(label);
+        mainMenu.add(ticTacToeButton);
+        mainMenu.add(notAvailableButton);
+        mainMenu.setVisible(true);
+
+        ticTacToeButton.addActionListener(e -> {
+            mainMenu.dispose();
+            showModeMenu();
+        });
+
+        notAvailableButton.addActionListener(e ->
+                JOptionPane.showMessageDialog(mainMenu, "Dit spel is nog niet beschikbaar.")
+        );
+    }
+
+    private static void showModeMenu() {
+        JFrame modeMenu = new JFrame("TicTacToe - Kies modus");
+        modeMenu.setSize(400, 200);
+        modeMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        modeMenu.setLayout(new GridLayout(3, 1, 10, 10));
+
+        JLabel label = new JLabel("Kies spelmodus:", SwingConstants.CENTER);
+        JButton pVcButton = new JButton("1. Player vs CPU");
+        JButton cVcButton = new JButton("2. CPU vs CPU");
+
+        modeMenu.add(label);
+        modeMenu.add(pVcButton);
+        modeMenu.add(cVcButton);
+        modeMenu.setVisible(true);
+
+        pVcButton.addActionListener(e -> {
+            modeMenu.dispose();
+            startPlayerVsCpu();
+        });
+
+        cVcButton.addActionListener(e -> {
+            modeMenu.dispose();
+            startCpuVsCpu();
+        });
+    }
+
+    private static void startPlayerVsCpu() {
         Random random = new Random();
+        game = new TicTacToeGame();
+        player1 = new Player("Mens", "X");
+        player2 = new AI("Computer", "O");
+        game.setPlayers(player1, player2);
 
-        System.out.println("Welkom bij Gaming Library!");
-        System.out.println("Kies spel:");
-        System.out.println("1. TicTacToe");
-        System.out.println("2. Nog niet beschikbaar");
-        int keuzeSpel = scanner.nextInt();
+        // Kop of munt
+        String[] opties = {"Kop", "Munt"};
+        int userChoice = JOptionPane.showOptionDialog(
+                null,
+                "Kies Kop of Munt",
+                "Kop of Munt",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opties,
+                opties[0]
+        );
 
-        BoardGame game;
-        if (keuzeSpel == 1) {
-            game = new TicTacToeGame();
+        int flip = random.nextInt(2);
+        if (userChoice == flip) {
+            JOptionPane.showMessageDialog(null, "Je hebt gewonnen! Jij begint.");
+            current = player1;
         } else {
-            System.out.println("Dit spel is nog niet beschikbaar.");
-            return;
+            JOptionPane.showMessageDialog(null, "Computer mag beginnen!");
+            current = player2;
         }
 
-        System.out.println("Welkom bij TicTacToe!");
-        System.out.println("Kies modus:");
-        System.out.println("1. Mens vs Computer");
-        System.out.println("2. Computer vs Computer");
-        int keuze;
+        setupBoard();
+    }
 
-        if (scanner.hasNextInt()) {
-            keuze = scanner.nextInt();
-        } else {
-            System.out.println("Ongeldige invoer, standaard modus 1 gekozen");
-            keuze = 1;
-            scanner.next(); // Continue
-        }
+    private static void startCpuVsCpu() {
+        Random random = new Random();
+        game = new TicTacToeGame();
+        player1 = new AI("Computer 1", "X");
+        player2 = new AI("Computer 2", "O");
+        game.setPlayers(player1, player2);
 
-        Player player1, player2;
+        current = random.nextBoolean() ? player1 : player2;
+        JOptionPane.showMessageDialog(null, current.getName() + " mag beginnen!");
 
-        if (keuze == 1) {
-            player1 = new Player("X");
-            player2 = new AI();
-        } else {
-            player1 = new AI();
-            player2 = new AI();
-        }
+        setupBoard();
 
-        Player current;
-
-        if (keuze == 1) {
-            System.out.println("Kop of Munt! Kies: 0 = Kop, 1 = Munt");
-            int userChoice = scanner.nextInt();
-            int flip = random.nextInt(2); // 0 of 1
-            if (userChoice == flip) {
-                System.out.println("Je mag beginnen!");
-                current = player1;
-            } else {
-                System.out.println("Computer begint!");
-                current = player2;
-            }
-        } else {
-            // Voor twee computers, willekeurige start
-            current = random.nextBoolean() ? player1 : player2;
-            System.out.println(current.getName() + " begint!");
-        }
-
-
-        while (!game.isGameOver()) {
-            game.printBoard();
-            System.out.println("Beurt: " + current.getName());
-            boolean moveDone = false;
-
-            while (!moveDone) {
-                if (current instanceof AI) {
+        new Thread(() -> {
+            try {
+                while (!game.isGameOver()) {
+                    Thread.sleep(800);
                     int[] zet = ((AI) current).chooseMove(game);
-                    game.makeMove(current, zet[0], zet[1]); // zet uitvoeren
-                    System.out.println("Computer zet op: " + zet[0] + "," + zet[1]);
-                    moveDone = true;
+                    game.makeMove(current, zet[0], zet[1]);
+                    buttons[zet[0]][zet[1]].setText(current.getMark());
+                    current = (current == player1) ? player2 : player1;
+                }
+                showWinner();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
 
-                    if (keuze == 2) {
-                        try {
-                            Thread.sleep(1000); // 1000 ms = 1 seconde
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
+    private static void setupBoard() {
+        frame = new JFrame("TicTacToe");
+        frame.setSize(400, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new GridLayout(3, 3));
+
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                JButton button = new JButton("");
+                buttons[row][col] = button;
+                int r = row, c = col;
+
+                button.addActionListener(e -> {
+                    if (current instanceof Player) {
+                        handleMove(r, c);
                     }
-                } else {
-                    System.out.println("Voer rij (0-2) in:");
-                    int row = scanner.nextInt();
-                    System.out.println("Voer kolom (0-2) in:");
-                    int col = scanner.nextInt();
-                    moveDone = game.makeMove(current, row, col);
-                    if (!moveDone) {
-                        System.out.println("Ongeldige zet, probeer opnieuw!");
-                    }
+                });
+
+                frame.add(button);
+            }
+        }
+        frame.setVisible(true);
+
+        if (current instanceof AI) {
+            cpuMove();
+        }
+    }
+
+    private static void handleMove(int row, int col) {
+        if (game.makeMove(current, row, col)) {
+            buttons[row][col].setText(current.getMark());
+            current = (current == player1) ? player2 : player1;
+
+            if (game.isGameOver()) {
+                showWinner();
+            } else if (current instanceof AI) {
+                cpuMove();
+            }
+        }
+    }
+
+    private static void cpuMove() {
+        SwingUtilities.invokeLater(() -> {
+            int[] zet = ((AI) current).chooseMove(game);
+            if (game.makeMove(current, zet[0], zet[1])) {
+                buttons[zet[0]][zet[1]].setText(current.getMark());
+                current = (current == player1) ? player2 : player1;
+
+                if (game.isGameOver()) {
+                    showWinner();
                 }
             }
-            current = (current == player1) ? player2 : player1;
-        }
+        });
+    }
 
-        game.printBoard();
+    private static void showWinner() {
         Player winner = game.getWinner();
-        if (winner != null) {
-            System.out.println("Winnaar: " + winner);
-        } else {
-            System.out.println("Gelijkspel!");
-        }
-
-        scanner.close();
+        String message = (winner != null) ? "Winnaar: " + winner.getName() : "Gelijkspel!";
+        JOptionPane.showMessageDialog(frame, message);
     }
 }
