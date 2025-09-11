@@ -2,11 +2,24 @@
   <dictionary name="project">
     <words>
       <w>beschikbaar</w>
+      <w>beurt</w>
       <w>gekozen</w>
+      <w>gelijkspel</w>
+      <w>invoer</w>
+      <w>keuze</w>
       <w>kies</w>
+      <w>kolom</w>
+      <w>lege</w>
       <w>modus</w>
+      <w>ongeldige</w>
+      <w>opnieuw</w>
+      <w>probeer</w>
       <w>spel</w>
+      <w>standaard</w>
+      <w>uitvoeren</w>
+      <w>voer</w>
       <w>wijmar</w>
+      <w>winnaar</w>
     </words>
   </dictionary>
 </component>
