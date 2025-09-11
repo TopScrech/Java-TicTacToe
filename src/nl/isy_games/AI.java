@@ -3,10 +3,10 @@ package nl.isy_games;
 import java.util.Random;
 
 public class AI extends Player {
-    private final Random random;
+    private Random random;
 
-    public AI() {
-        super("Wijmar-Ultimate-3000");
+    public AI(String name, String mark) {
+        super(name, mark);
         random = new Random();
     }
 
@@ -19,14 +19,12 @@ public class AI extends Player {
             row = random.nextInt(3);
             col = random.nextInt(3);
 
-            // check lege cel via TicTacToeGame
             if (((TicTacToeGame) game).isCellEmpty(row, col)) {
                 move[0] = row;
                 move[1] = col;
                 valid = true;
             }
         }
-
         return move;
     }
 }
