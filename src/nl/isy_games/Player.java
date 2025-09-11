@@ -1,15 +1,19 @@
 package nl.isy_games;
 
 public class Player {
-    String name;
+    private String name;
+    private String mark; // X of O
 
-    // Init example:
-    // Player p1 = new Player("Wijmar");
-    public Player(String name) {
+    public Player(String name, String mark) {
         this.name = name;
+        this.mark = mark;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getMark() {
+        return mark;
     }
 }
