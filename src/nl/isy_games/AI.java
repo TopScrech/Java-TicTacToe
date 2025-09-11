@@ -3,7 +3,8 @@ package nl.isy_games;
 import java.util.Random;
 
 public class AI extends Player {
-    private Random random;
+    private final Random random;
+
     public AI() {
         super("Wijmar-Ultimate-3000");
         random = new Random();
@@ -25,6 +26,7 @@ public class AI extends Player {
                 valid = true;
             }
         }
+
         return move;
     }
 }
