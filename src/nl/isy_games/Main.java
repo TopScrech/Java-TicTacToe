@@ -7,7 +7,7 @@ import java.util.Random;
 public class Main {
     private static TicTacToeGame game;
     private static Player player1, player2, current;
-    private static JButton[][] buttons = new JButton[3][3];
+    private static final JButton[][] buttons = new JButton[3][3];
     private static JFrame frame;
 
     public static void main(String[] args) {
@@ -31,12 +31,12 @@ public class Main {
         mainMenu.setLocationRelativeTo(null); // Centers the window
         mainMenu.setVisible(true);
 
-        ticTacToeButton.addActionListener(e -> {
+        ticTacToeButton.addActionListener(ignored -> {
             mainMenu.dispose();
             showModeMenu();
         });
 
-        notAvailableButton.addActionListener(e ->
+        notAvailableButton.addActionListener(ignored ->
                 JOptionPane.showMessageDialog(mainMenu, "Dit spel is nog niet beschikbaar.")
         );
     }
@@ -58,12 +58,12 @@ public class Main {
         modeMenu.setLocationRelativeTo(null); // Centers the window
         modeMenu.setVisible(true);
 
-        pVcButton.addActionListener(e -> {
+        pVcButton.addActionListener(ignored -> {
             modeMenu.dispose();
             startPlayerVsCpu();
         });
 
-        cVcButton.addActionListener(e -> {
+        cVcButton.addActionListener(ignored -> {
             modeMenu.dispose();
             startCpuVsCpu();
         });
@@ -77,7 +77,8 @@ public class Main {
         game.setPlayers(player1, player2);
 
         // Kop of munt
-        String[] opties = {"Kop", "Munt"};
+        String[] options = {"Kop", "Munt"};
+
         int userChoice = JOptionPane.showOptionDialog(
                 null,
                 "Kies Kop of Munt",
@@ -85,11 +86,12 @@ public class Main {
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                opties,
-                opties[0]
+                options,
+                options[0]
         );
 
         int flip = random.nextInt(2);
+
         if (userChoice == flip) {
             JOptionPane.showMessageDialog(null, "Je hebt gewonnen! Jij begint.");
             current = player1;
@@ -141,7 +143,7 @@ public class Main {
                 buttons[row][col] = button;
                 int r = row, c = col;
 
-                button.addActionListener(e -> {
+                button.addActionListener(ignored -> {
                     if (current instanceof Player) {
                         handleMove(r, c);
                     }

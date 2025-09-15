@@ -3,7 +3,7 @@ package nl.isy_games;
 import java.util.Random;
 
 public class AI extends Player {
-    private Random random;
+    private final Random random;
 
     public AI(String name, String mark) {
         super(name, mark);
@@ -25,6 +25,7 @@ public class AI extends Player {
                 valid = true;
             }
         }
+
         return move;
     }
 }

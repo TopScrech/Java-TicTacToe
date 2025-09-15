@@ -1,7 +1,7 @@
 package nl.isy_games;
 
 public class TicTacToeGame extends BoardGame {
-    private String[][] board;
+    private final String[][] board;
     private final int SIZE = 3;
     private Player playerX;
     private Player playerO;
@@ -96,6 +96,4 @@ public class TicTacToeGame extends BoardGame {
     public boolean isCellEmpty(int row, int col) {
         return board[row][col].equals(" ");
     }
-
 }
-

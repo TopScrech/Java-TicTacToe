@@ -1,8 +1,8 @@
 package nl.isy_games;
 
 public class Player {
-    private String name;
-    private String mark; // X of O
+    private final String name;
+    private final String mark; // X of O
 
     public Player(String name, String mark) {
         this.name = name;
