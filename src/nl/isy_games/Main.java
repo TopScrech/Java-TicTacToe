@@ -1,4 +1,5 @@
-import classes.*;
+package nl.isy_games;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
