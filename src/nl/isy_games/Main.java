@@ -27,6 +27,8 @@ public class Main {
         mainMenu.add(label);
         mainMenu.add(ticTacToeButton);
         mainMenu.add(notAvailableButton);
+
+        mainMenu.setLocationRelativeTo(null); // Centers the window
         mainMenu.setVisible(true);
 
         ticTacToeButton.addActionListener(e -> {
@@ -52,6 +54,8 @@ public class Main {
         modeMenu.add(label);
         modeMenu.add(pVcButton);
         modeMenu.add(cVcButton);
+
+        modeMenu.setLocationRelativeTo(null); // Centers the window
         modeMenu.setVisible(true);
 
         pVcButton.addActionListener(e -> {
@@ -146,6 +150,8 @@ public class Main {
                 frame.add(button);
             }
         }
+
+        frame.setLocationRelativeTo(null); // Centers the window
         frame.setVisible(true);
 
         if (current instanceof AI) {
