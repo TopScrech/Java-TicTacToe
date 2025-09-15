@@ -20,9 +20,11 @@ public class TicTacToeGame extends BoardGame {
         if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
             return false;
         }
+
         if (!board[row][col].equals(" ")) {
             return false;
         }
+
         board[row][col] = player.getMark();
         return true;
     }
@@ -33,6 +35,7 @@ public class TicTacToeGame extends BoardGame {
         if (getWinner() != null) {
             return true;
         }
+
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (board[i][j].equals(" ")) {
