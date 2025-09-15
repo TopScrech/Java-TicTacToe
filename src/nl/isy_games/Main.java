@@ -144,7 +144,7 @@ public class Main {
                 int r = row, c = col;
 
                 button.addActionListener(ignored -> {
-                    if (current instanceof Player) {
+                    if (current != null) {
                         handleMove(r, c);
                     }
                 });
