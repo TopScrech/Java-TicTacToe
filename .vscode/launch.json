@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "LoginGUI",
+            "request": "launch",
+            "mainClass": "nl.isy_games.LoginGUI",
+            "projectName": "Java-TicTacToe_4e9bc9c7"
+        },
+        {
+            "type": "php",
+            "request": "launch",
+            "name": "Run using local PHP Interpreter",
+            "program": "${file}",
+            "runtimeExecutable": "C:\\php-8\\php.exe"
+        }
+    ]
+}
