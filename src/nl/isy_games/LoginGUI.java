@@ -55,11 +55,9 @@ public class LoginGUI extends JFrame {
             loggedIn = true;
             statusLabel.setText("Status: Ingelogd als " + playerName);
 
-            // Start een timer om online spelers te verversen
             Timer timer = new Timer(3000, e -> updateOnlineList());
             timer.start();
 
-            // Open game selectiemenu
             SwingUtilities.invokeLater(() -> new GameSelector(client));
 
         } catch (IOException ex) {
