@@ -1,0 +1,29 @@
+2025-09-23 09:26:06.102  INFO 13152 --- [main] nl.hanze.newgameserver.Main              : Starting Main on DESKTOP-SLPMJ2P with PID 13152 (C:\Users\Pasca\OneDrive - Hanze\Java\GameServer\newgamesver-release-V1.jar started by Pasca in C:\Users\Pasca\OneDrive - Hanze\Java\GameServer)
+2025-09-23 09:26:06.109  INFO 13152 --- [main] nl.hanze.newgameserver.Main              : No active profile set, falling back to default profiles: default
+2025-09-23 09:26:07.762  INFO 13152 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2025-09-23 09:26:07.779  INFO 13152 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-09-23 09:26:07.780  INFO 13152 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.39]
+2025-09-23 09:26:07.879  INFO 13152 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-09-23 09:26:07.880  INFO 13152 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1678 ms
+2025-09-23 09:26:08.043  INFO 13152 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'clientInboundChannelExecutor'
+2025-09-23 09:26:08.048  INFO 13152 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'clientOutboundChannelExecutor'
+2025-09-23 09:26:08.097  INFO 13152 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'messageBrokerTaskScheduler'
+2025-09-23 09:26:08.166  INFO 13152 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'brokerChannelExecutor'
+2025-09-23 09:26:08.450  INFO 13152 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [public/index.html]
+2025-09-23 09:26:08.625  INFO 13152 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2025-09-23 09:26:08.627  INFO 13152 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-09-23 09:26:08.628  INFO 13152 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2025-09-23 09:26:08.628  INFO 13152 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-09-23 09:26:08.643  INFO 13152 --- [main] nl.hanze.newgameserver.Main              : Started Main in 3.266 seconds (JVM running for 4.131)
+2025-09-23 09:26:08.648  INFO 13152 --- [main] main                                     : gameserver is now listening on port 7789
+2025-09-23 09:26:33.571  INFO 13152 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-23 09:26:33.572  INFO 13152 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-09-23 09:26:33.577  INFO 13152 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2025-09-23 09:27:08.180  INFO 13152 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 12, active threads = 0, queued tasks = 0, completed tasks = 12], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 12, active threads = 1, queued tasks = 2, completed tasks = 8]
+2025-09-23 09:30:25.898  INFO 13152 --- [SpringContextShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-09-23 09:30:25.898  INFO 13152 --- [SpringContextShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2025-09-23 09:30:25.899  INFO 13152 --- [SpringContextShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-09-23 09:30:25.963  INFO 13152 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'brokerChannelExecutor'
+2025-09-23 09:30:25.964  INFO 13152 --- [SpringContextShutdownHook] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'messageBrokerTaskScheduler'
+2025-09-23 09:30:25.964  INFO 13152 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'clientOutboundChannelExecutor'
+2025-09-23 09:30:25.966  INFO 13152 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'clientInboundChannelExecutor'
