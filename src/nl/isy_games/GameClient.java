@@ -21,26 +21,27 @@ public class GameClient {
 
     public void login() throws IOException {
         send("login " + playerName);
-
         String response;
         while ((response = in.readLine()) != null) {
             System.out.println("Server response: " + response);
             if (response.startsWith("OK")) {
-                System.out.println("Login geslaagd!");
                 return;
             } else if (response.startsWith("ERR")) {
                 throw new IOException("Login failed: " + response);
             }
         }
-
         throw new IOException("Login failed: geen antwoord van server");
     }
 
-
-
-    public void subscribe(String gameType) {
+    public void subscribe(String gameType) throws IOException {
         send("subscribe " + gameType);
+        String response = in.readLine();
+        System.out.println("Server: " + response);
+        if (!response.startsWith("OK")) {
+            throw new IOException("Subscribe failed: " + response);
+        }
     }
+
 
     public void sendMove(int move) {
         send("move " + move);
@@ -50,53 +51,20 @@ public class GameClient {
         send("forfeit");
     }
 
-    public void listen() throws IOException {
+    public void listen(ServerListener listener) throws IOException {
         String message;
         while ((message = in.readLine()) != null) {
             System.out.println("Server: " + message);
-            handleServerMessage(message);
+            listener.onMessage(message); // callback naar GUI of andere logica
+//            handleServerMessage(message);
         }
     }
 
-    private void handleServerMessage(String message) {
-        if (message.contains("SVR GAME YOURTURN")) {
-            int zet = getNextMove();
-            sendMove(zet);
-        } else if (message.contains("SVR GAME MOVE")) {
-        } else if (message.contains("SVR GAME WIN") || message.contains("SVR GAME LOSS") || message.contains("SVR GAME DRAW")) {
-            System.out.println("Match einde: " + message);
-        }
-    }
-
-    private int getNextMove() {
-        return (int)(Math.random() * 9);
-    }
-
-    private void send(String msg) {
-        out.println(msg);
-    }
-
-    public void close() throws IOException {
-        send("logout");
-        socket.close();
-    }
-
-    public static void main(String[] args) {
-        try {
-            GameClient client = new GameClient("127.0.0.1", 7789, "jouwnaam");
-            client.login();
-            client.subscribe("TicTacToe");
-            client.listen();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public List<String> getPlayerList() throws IOException {
         send("get playerlist");
         String response = in.readLine(); // OK
         response = in.readLine();         // SVR PLAYERLIST ["player1","player2",...]
-
         List<String> players = new ArrayList<>();
         if (response != null && response.startsWith("SVR PLAYERLIST")) {
             int start = response.indexOf('[');
@@ -112,6 +80,47 @@ public class GameClient {
         return players;
     }
 
+    public List<String> getGameList() throws IOException {
+        send("get gamelist");
+        String response;
+
+        while ((response = in.readLine()) != null) {
+            System.out.println("Server response: " + response);
+
+            if (response.startsWith("OK")) {
+                continue;
+            }
+
+            if (response.startsWith("SVR GAMELIST")) {
+                String list = response.substring("SVR GAMELIST".length()).trim();
+
+                list = list.replace("[", "").replace("]", "").replace("\"", "");
+
+                String[] games = list.split(",");
+                List<String> result = new java.util.ArrayList<>();
+                for (String g : games) {
+                    result.add(g.trim());
+                }
+                return result;
+            }
+            if (response.startsWith("ERR")) {
+                throw new IOException("Kon gamelist niet ophalen: " + response);
+            }
+        }
+        throw new IOException("Geen antwoord van server bij gamelist");
+    }
 
 
+    private void send(String msg) {
+        out.println(msg);
+    }
+
+    public void close() throws IOException {
+        send("logout");
+        socket.close();
+    }
+
+    public interface ServerListener {
+        void onMessage(String message);
+    }
 }
