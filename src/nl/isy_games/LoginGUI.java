@@ -84,4 +84,3 @@ public class LoginGUI extends JFrame {
         SwingUtilities.invokeLater(LoginGUI::new);
     }
 }
-
