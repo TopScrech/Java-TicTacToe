@@ -55,7 +55,7 @@ public class GameClient {
         String message;
         while ((message = in.readLine()) != null) {
             System.out.println("Server: " + message);
-            listener.onMessage(message); // callback naar GUI of andere logica
+            listener.onMessage(message); 
 //            handleServerMessage(message);
         }
     }
@@ -63,8 +63,8 @@ public class GameClient {
 
     public List<String> getPlayerList() throws IOException {
         send("get playerlist");
-        String response = in.readLine(); // OK
-        response = in.readLine();         // SVR PLAYERLIST ["player1","player2",...]
+        String response = in.readLine(); 
+        response = in.readLine();        
         List<String> players = new ArrayList<>();
         if (response != null && response.startsWith("SVR PLAYERLIST")) {
             int start = response.indexOf('[');
