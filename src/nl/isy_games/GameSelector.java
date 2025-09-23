@@ -34,14 +34,11 @@ public class GameSelector extends JFrame {
                             client.subscribe("Tic-tac-toe");
                             JOptionPane.showMessageDialog(this,
                                     "Ingeschreven voor " + game + "!\nWachten op tegenstander...");
-                            // Start luisteren naar server events
                             new Thread(() -> {
                                 try {
                                     client.listen(message -> {
-                                        // Hier verwerk je alle serverberichten
                                         System.out.println("Server bericht: " + message);
 
-                                        // Voorbeeld: popup bij match einde
                                         if (message.contains("SVR GAME WIN") || message.contains("SVR GAME LOSS") || message.contains("SVR GAME DRAW")) {
                                             SwingUtilities.invokeLater(() ->
                                                     JOptionPane.showMessageDialog(this, "Match einde: " + message)
@@ -75,7 +72,6 @@ public class GameSelector extends JFrame {
         setVisible(true);
     }
 
-    // Test-startpunt
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
