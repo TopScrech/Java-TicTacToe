@@ -2,6 +2,8 @@ package nl.isy_games;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameClient {
 
@@ -19,12 +21,22 @@ public class GameClient {
 
     public void login() throws IOException {
         send("login " + playerName);
-        String response = in.readLine();
-        System.out.println("Server: " + response);
-        if (!response.startsWith("OK")) {
-            throw new IOException("Login failed: " + response);
+
+        String response;
+        while ((response = in.readLine()) != null) {
+            System.out.println("Server response: " + response);
+            if (response.startsWith("OK")) {
+                System.out.println("Login geslaagd!");
+                return;
+            } else if (response.startsWith("ERR")) {
+                throw new IOException("Login failed: " + response);
+            }
         }
+
+        throw new IOException("Login failed: geen antwoord van server");
     }
+
+
 
     public void subscribe(String gameType) {
         send("subscribe " + gameType);
@@ -79,4 +91,27 @@ public class GameClient {
             e.printStackTrace();
         }
     }
+
+    public List<String> getPlayerList() throws IOException {
+        send("get playerlist");
+        String response = in.readLine(); // OK
+        response = in.readLine();         // SVR PLAYERLIST ["player1","player2",...]
+
+        List<String> players = new ArrayList<>();
+        if (response != null && response.startsWith("SVR PLAYERLIST")) {
+            int start = response.indexOf('[');
+            int end = response.indexOf(']');
+            if (start >= 0 && end > start) {
+                String list = response.substring(start + 1, end);
+                String[] names = list.replaceAll("\"", "").split(",");
+                for (String name : names) {
+                    if (!name.trim().isEmpty()) players.add(name.trim());
+                }
+            }
+        }
+        return players;
+    }
+
+
+
 }
