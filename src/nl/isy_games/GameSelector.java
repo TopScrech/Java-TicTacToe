@@ -15,7 +15,7 @@ public class GameSelector extends JFrame {
     private JButton[][] buttons;
     private JLabel statusLabel;
 
-    private boolean boardOpened = false; // add this as a class field
+    private boolean boardOpened = false;
 
     public GameSelector(GameClient client) {
         this.client = client;
@@ -88,13 +88,11 @@ public class GameSelector extends JFrame {
             String playerToMove = extractValue(message, "PLAYERTOMOVE");
             String opponentName = extractValue(message, "OPPONENT");
 
-            // Ignore invalid matches
             if (opponentName == null || opponentName.isEmpty() || opponentName.equalsIgnoreCase(myName)) {
                 System.out.println("WARNING: Ignoring invalid match: opponent='" + opponentName + "'");
                 return;
             }
 
-            // If board already exists, ignore duplicate messages
             if (gameFrame != null) {
                 System.out.println("INFO: Board already exists for this client, ignoring duplicate match message.");
                 return;
@@ -107,7 +105,6 @@ public class GameSelector extends JFrame {
                 repaint();
             }
 
-            // Assign marks based on PLAYERTOMOVE
             if (playerToMove.equals(myName)) {
                 me = new Player(myName, "X");
                 opponent = new Player(opponentName, "O");
@@ -125,7 +122,7 @@ public class GameSelector extends JFrame {
         }
 
         else if (message.startsWith("SVR GAME MOVE")) {
-            if (game == null) return; // Ignore moves before match setup
+            if (game == null) return; 
 
             String[] parts = message.replace("{", "").replace("}", "").split(",");
             String playerName = parts[0].split(":")[1].replace("\"", "").trim();
