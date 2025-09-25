@@ -15,7 +15,9 @@ public class GameSelector extends JFrame {
     private JButton[][] buttons;
     private JLabel statusLabel;
     private JLabel turnLabel;
-    
+
+    private boolean boardOpened = false;
+
     public GameSelector(GameClient client) {
         this.client = client;
 
@@ -88,7 +90,6 @@ public class GameSelector extends JFrame {
 
     private void handleServerMessage(String message) {
         System.out.println("Server: " + message);
-        System.out.println("This is handleServerMessage!");
 
         if (message.startsWith("SVR GAME MATCH")) {
 
@@ -98,11 +99,6 @@ public class GameSelector extends JFrame {
 
             if (opponentName == null || opponentName.isEmpty() || opponentName.equalsIgnoreCase(myName)) {
                 System.out.println("WARNING: Ignoring invalid match: opponent='" + opponentName + "'");
-                return;
-            }
-
-            if (gameFrame != null) {
-                System.out.println("INFO: Board already exists for this client, ignoring duplicate match message.");
                 return;
             }
 
@@ -116,11 +112,12 @@ public class GameSelector extends JFrame {
             if (playerToMove.equals(myName)) {
                 me = new Player(myName, "X");
                 opponent = new Player(opponentName, "O");
+                currentPlayer = me;
             } else {
                 me = new Player(myName, "O");
                 opponent = new Player(opponentName, "X");
+                currentPlayer = opponent;
             }
-            currentPlayer = (playerToMove.equals(myName)) ? me : opponent;
 
             game = new TicTacToeGame();
             game.setPlayers(me, opponent);
@@ -166,11 +163,10 @@ public class GameSelector extends JFrame {
 
     private void setupBoard() {
         gameFrame = new JFrame("TicTacToe: " + me.getName() + " vs " + opponent.getName());
-        gameFrame.setSize(400, 450); // Slightly taller to fit label
+        gameFrame.setSize(400, 450); 
         gameFrame.setLayout(new BorderLayout());
         gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Turn label at the top
         turnLabel = new JLabel("", SwingConstants.CENTER);
         turnLabel.setFont(new Font("Arial", Font.BOLD, 16));
         gameFrame.add(turnLabel, BorderLayout.NORTH);
