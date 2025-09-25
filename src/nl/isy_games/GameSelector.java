@@ -13,6 +13,9 @@ public class GameSelector extends JFrame {
     private Player currentPlayer;
     private JFrame gameFrame;
     private JButton[][] buttons;
+    private JLabel statusLabel;
+
+    private boolean boardOpened = false; // add this as a class field
 
     public GameSelector(GameClient client) {
         this.client = client;
@@ -37,15 +40,22 @@ public class GameSelector extends JFrame {
                     if (gameName.equalsIgnoreCase("Tic-tac-toe")) {
                         try {
                             client.subscribe("Tic-tac-toe");
-                            JOptionPane.showMessageDialog(this,
-                                    "Ingeschreven voor " + gameName + "!\nWachten op tegenstander...");
+
+                            if (statusLabel == null) {
+                                statusLabel = new JLabel("Ingeschreven voor " + gameName + " - Wachten op tegenstander...",
+                                        SwingConstants.CENTER);
+                                add(statusLabel);
+                                revalidate();
+                                repaint();
+                            }
 
                             new Thread(() -> {
                                 try {
                                     client.listen(message -> SwingUtilities.invokeLater(() -> handleServerMessage(message)));
                                 } catch (IOException ex) {
                                     SwingUtilities.invokeLater(() ->
-                                            JOptionPane.showMessageDialog(this, "Fout bij luisteren naar server: " + ex.getMessage()));
+                                            JOptionPane.showMessageDialog(this,
+                                                    "Fout bij luisteren naar server: " + ex.getMessage()));
                                 }
                             }).start();
 
@@ -70,21 +80,53 @@ public class GameSelector extends JFrame {
 
     private void handleServerMessage(String message) {
         System.out.println("Server: " + message);
+        System.out.println("This is handleServerMessage!");
 
         if (message.startsWith("SVR GAME MATCH")) {
-            String meName = message.split("PLAYERTOMOVE:")[1].split(",")[0].replace("\"", "").trim();
-            String opponentName = message.split("OPPONENT:")[1].replace("}", "").replace("\"", "").trim();
 
-            me = new Player(meName, "X"); 
-            opponent = new Player(opponentName, "O");
+            String myName = client.getPlayerName();
+            String playerToMove = extractValue(message, "PLAYERTOMOVE");
+            String opponentName = extractValue(message, "OPPONENT");
+
+            // Ignore invalid matches
+            if (opponentName == null || opponentName.isEmpty() || opponentName.equalsIgnoreCase(myName)) {
+                System.out.println("WARNING: Ignoring invalid match: opponent='" + opponentName + "'");
+                return;
+            }
+
+            // If board already exists, ignore duplicate messages
+            if (gameFrame != null) {
+                System.out.println("INFO: Board already exists for this client, ignoring duplicate match message.");
+                return;
+            }
+
+            if (statusLabel != null) {
+                remove(statusLabel);
+                statusLabel = null;
+                revalidate();
+                repaint();
+            }
+
+            // Assign marks based on PLAYERTOMOVE
+            if (playerToMove.equals(myName)) {
+                me = new Player(myName, "X");
+                opponent = new Player(opponentName, "O");
+            } else {
+                me = new Player(myName, "O");
+                opponent = new Player(opponentName, "X");
+            }
+            currentPlayer = (playerToMove.equals(myName)) ? me : opponent;
+
             game = new TicTacToeGame();
             game.setPlayers(me, opponent);
-            currentPlayer = me;
 
+            System.out.println("DEBUG: Opening JFrame for player '" + me.getName() + "' vs opponent '" + opponent.getName() + "'");
             setupBoard();
         }
 
         else if (message.startsWith("SVR GAME MOVE")) {
+            if (game == null) return; // Ignore moves before match setup
+
             String[] parts = message.replace("{", "").replace("}", "").split(",");
             String playerName = parts[0].split(":")[1].replace("\"", "").trim();
             int row = Integer.parseInt(parts[1].split(":")[1].trim());
@@ -100,8 +142,19 @@ public class GameSelector extends JFrame {
                 message.startsWith("SVR GAME LOSS") ||
                 message.startsWith("SVR GAME DRAW")) {
             JOptionPane.showMessageDialog(this, "Match einde: " + message);
-            gameFrame.dispose();
+            if (gameFrame != null) {
+                gameFrame.dispose();
+                gameFrame = null;
+            }
         }
+    }
+
+    private String extractValue(String msg, String key) {
+        int start = msg.indexOf(key + ":");
+        if (start == -1) return "";
+        start = msg.indexOf("\"", start) + 1;
+        int end = msg.indexOf("\"", start);
+        return msg.substring(start, end);
     }
 
     private void setupBoard() {
@@ -119,12 +172,13 @@ public class GameSelector extends JFrame {
                 btn.addActionListener(e -> {
                     if (currentPlayer == me && game.isCellEmpty(row, col)) {
                         try {
-                            client.sendMove(row * 3 + col); 
+                            client.sendMove(row * 3 + col);
                             game.makeMove(me, row, col);
                             btn.setText(me.getMark());
                             currentPlayer = opponent;
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(gameFrame, "Fout bij verzenden van zet: " + ex.getMessage());
+                            JOptionPane.showMessageDialog(gameFrame,
+                                    "Fout bij verzenden van zet: " + ex.getMessage());
                         }
                     }
                 });
@@ -134,17 +188,5 @@ public class GameSelector extends JFrame {
 
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                GameClient client = new GameClient("127.0.0.1", 7789, "testplayer");
-                client.login();
-                new GameSelector(client);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Kan geen verbinding maken: " + e.getMessage());
-            }
-        });
     }
 }
