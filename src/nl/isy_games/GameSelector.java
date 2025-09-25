@@ -12,7 +12,7 @@ public class GameSelector extends JFrame {
     private Player me, opponent;
     private Player currentPlayer;
     private JFrame gameFrame;
-    private JButton[][] buttons;
+    private JButton[] buttons;
     private JLabel statusLabel;
     private JLabel turnLabel;
 
@@ -131,12 +131,12 @@ public class GameSelector extends JFrame {
 
             String[] parts = message.replace("{", "").replace("}", "").split(",");
             String playerName = parts[0].split(":")[1].replace("\"", "").trim();
-            int row = Integer.parseInt(parts[1].split(":")[1].trim());
-            int col = Integer.parseInt(parts[2].split(":")[1].trim());
+            int pos = Integer.parseInt(parts[1].split(":")[1].trim());
+            //int col = Integer.parseInt(parts[2].split(":")[1].trim());
 
             Player player = playerName.equals(me.getName()) ? me : opponent;
-            game.makeMove(player, row, col);
-            buttons[row][col].setText(player.getMark());
+            game.makeMove(player, pos);
+            buttons[pos].setText(player.getMark());
             currentPlayer = (player == me) ? opponent : me;
 
             updateTurnLabel();
@@ -172,17 +172,19 @@ public class GameSelector extends JFrame {
         gameFrame.add(turnLabel, BorderLayout.NORTH);
 
         JPanel boardPanel = new JPanel(new GridLayout(3, 3));
-        buttons = new JButton[3][3];
+        buttons = new JButton[9];
+        int i = 0;
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
                 JButton btn = new JButton("");
-                buttons[r][c] = btn;
-                int row = r, col = c;
+                buttons[i] = btn;
+                i++;
+                int pos = r;
                 btn.addActionListener(e -> {
-                    if (currentPlayer == me && game.isCellEmpty(row, col)) {
+                    if (currentPlayer == me && game.isCellEmpty(pos)) {
                         try {
-                            client.sendMove(row * 3 + col);
-                            game.makeMove(me, row, col);
+                            client.sendMove(pos);
+                            game.makeMove(me, pos);
                             btn.setText(me.getMark());
                             currentPlayer = opponent;
                             updateTurnLabel();

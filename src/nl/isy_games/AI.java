@@ -11,17 +11,15 @@ public class AI extends Player {
     }
 
     public int[] chooseMove(BoardGame game) {
-        int row, col;
+        int pos;
         int[] move = new int[2];
         boolean valid = false;
 
         while (!valid) {
-            row = random.nextInt(3);
-            col = random.nextInt(3);
+            pos = random.nextInt(9);
 
-            if (((TicTacToeGame) game).isCellEmpty(row, col)) {
-                move[0] = row;
-                move[1] = col;
+            if (((TicTacToeGame) game).isCellEmpty(pos)) {
+                move[0] = pos;
                 valid = true;
             }
         }

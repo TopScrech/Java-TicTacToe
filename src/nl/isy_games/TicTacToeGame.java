@@ -1,31 +1,31 @@
 package nl.isy_games;
 
 public class TicTacToeGame extends BoardGame {
-    private final String[][] board;
-    private final int SIZE = 3;
+    private final String[] board;
+    private final int SIZE = 9;
     private Player playerX;
     private Player playerO;
 
     public TicTacToeGame() {
-        board = new String[SIZE][SIZE];
+        board = new String[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                board[i][j] = " ";
+            for (int j = 0; j < 3; j++) {
+                board[i] = " ";
             }
         }
     }
 
     @Override
-    public boolean makeMove(Player player, int row, int col) {
-        if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
+    public boolean makeMove(Player player, int pos) {
+        if (pos < 0 || pos >= SIZE) {
             return false;
         }
 
-        if (!board[row][col].equals(" ")) {
+        if (!board[pos].equals(" ")) {
             return false;
         }
 
-        board[row][col] = player.getMark();
+        board[pos] = player.getMark();
         return true;
     }
 
@@ -37,8 +37,8 @@ public class TicTacToeGame extends BoardGame {
         }
 
         for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (board[i][j].equals(" ")) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i].equals(" ")) {
                     return false;
                 }
             }
@@ -59,31 +59,35 @@ public class TicTacToeGame extends BoardGame {
     @Override
     public Player getWinner() {
         for (int i = 0; i < SIZE; i++) {
-            if (!board[i][0].equals(" ") &&
-                    board[i][0].equals(board[i][1]) &&
-                    board[i][1].equals(board[i][2])) {
-                return board[i][0].equals("X") ? playerX : playerO;
+            if (!board[i].equals(" ") &&
+                    board[i].equals(board[i]) &&
+                    board[i].equals(board[i])) {
+                return board[i].equals("X") ? playerX : playerO;
             }
         }
 
         for (int i = 0; i < SIZE; i++) {
-            if (!board[0][i].equals(" ") &&
-                    board[0][i].equals(board[1][i]) &&
-                    board[1][i].equals(board[2][i])) {
-                return board[0][i].equals("X") ? playerX : playerO;
+            if (!board[i].equals(" ") &&
+                    board[i].equals(board[i]) &&
+                    board[i].equals(board[i])) {
+                return board[i].equals("X") ? playerX : playerO;
+            }
+        }
+        
+        for (int i = 0; i < SIZE; i++) {
+            if (!board[i].equals(" ") &&
+                    board[i].equals(board[i]) &&
+                    board[i].equals(board[i])) {
+                return board[i].equals("X") ? playerX : playerO;
             }
         }
 
-        if (!board[0][0].equals(" ") &&
-                board[0][0].equals(board[1][1]) &&
-                board[1][1].equals(board[2][2])) {
-            return board[0][0].equals("X") ? playerX : playerO;
-        }
-
-        if (!board[0][2].equals(" ") &&
-                board[0][2].equals(board[1][1]) &&
-                board[1][1].equals(board[2][0])) {
-            return board[0][2].equals("X") ? playerX : playerO;
+        for (int i = 0; i < SIZE; i++) {
+            if (!board[i].equals(" ") &&
+                    board[i].equals(board[i]) &&
+                    board[i].equals(board[i])) {
+                return board[i].equals("X") ? playerX : playerO;
+            }
         }
 
         return null;
@@ -96,7 +100,7 @@ public class TicTacToeGame extends BoardGame {
         }
     }
 
-    public boolean isCellEmpty(int row, int col) {
-        return board[row][col].equals(" ");
+    public boolean isCellEmpty(int pos) {
+        return board[pos].equals(" ");
     }
 }
