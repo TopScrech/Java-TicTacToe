@@ -16,6 +16,7 @@ public class GameSelector extends JFrame {
     private JLabel statusLabel;
     private JLabel turnLabel;
 
+    private boolean boardOpened = false;
 
     public GameSelector(GameClient client) {
         this.client = client;
