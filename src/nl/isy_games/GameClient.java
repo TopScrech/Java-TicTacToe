@@ -19,6 +19,10 @@ public class GameClient {
         this.playerName = playerName;
     }
 
+    public String getPlayerName() {
+        return playerName;
+    }
+
     public void login() throws IOException {
         send("login " + playerName);
         String response;
@@ -32,15 +36,6 @@ public class GameClient {
 
     public void subscribe(String gameType) throws IOException {
         send("subscribe " + gameType);
-        String response;
-        while ((response = in.readLine()) != null) {
-            System.out.println("Server: " + response);
-            if (response.startsWith("OK") || response.startsWith("SVR GAME MATCH")) {
-                return;
-            } else if (response.startsWith("ERR")) {
-                throw new IOException("Subscribe failed: " + response);
-            }
-        }
     }
 
     public void sendMove(int move) {
@@ -83,7 +78,11 @@ public class GameClient {
         while ((response = in.readLine()) != null) {
             System.out.println("Server response: " + response);
             if (response.startsWith("SVR GAMELIST")) {
-                String list = response.substring("SVR GAMELIST".length()).replace("[", "").replace("]", "").replace("\"", "").trim();
+                String list = response.substring("SVR GAMELIST".length())
+                        .replace("[", "")
+                        .replace("]", "")
+                        .replace("\"", "")
+                        .trim();
                 List<String> result = new ArrayList<>();
                 for (String g : list.split(",")) result.add(g.trim());
                 return result;
@@ -93,9 +92,10 @@ public class GameClient {
         throw new IOException("Geen antwoord van server bij gamelist");
     }
 
-    private void send(String msg) {
+    protected void send(String msg) {
         out.println(msg);
     }
+
 
     public void close() throws IOException {
         send("logout");
