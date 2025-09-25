@@ -14,9 +14,8 @@ public class GameSelector extends JFrame {
     private JFrame gameFrame;
     private JButton[][] buttons;
     private JLabel statusLabel;
-
-    private boolean boardOpened = false;
-
+    private JLabel turnLabel;
+    
     public GameSelector(GameClient client) {
         this.client = client;
 
@@ -78,6 +77,15 @@ public class GameSelector extends JFrame {
         setVisible(true);
     }
 
+    private void updateTurnLabel() {
+        if (currentPlayer == me) {
+            turnLabel.setText("Jouw beurt (" + me.getMark() + ")");
+        } else {
+            turnLabel.setText("Beurt van " + opponent.getName() + " (" + opponent.getMark() + ")");
+        }
+    }
+
+
     private void handleServerMessage(String message) {
         System.out.println("Server: " + message);
         System.out.println("This is handleServerMessage!");
@@ -122,7 +130,7 @@ public class GameSelector extends JFrame {
         }
 
         else if (message.startsWith("SVR GAME MOVE")) {
-            if (game == null) return; 
+            if (game == null) return;
 
             String[] parts = message.replace("{", "").replace("}", "").split(",");
             String playerName = parts[0].split(":")[1].replace("\"", "").trim();
@@ -133,6 +141,8 @@ public class GameSelector extends JFrame {
             game.makeMove(player, row, col);
             buttons[row][col].setText(player.getMark());
             currentPlayer = (player == me) ? opponent : me;
+
+            updateTurnLabel();
         }
 
         else if (message.startsWith("SVR GAME WIN") ||
@@ -156,10 +166,16 @@ public class GameSelector extends JFrame {
 
     private void setupBoard() {
         gameFrame = new JFrame("TicTacToe: " + me.getName() + " vs " + opponent.getName());
-        gameFrame.setSize(400, 400);
-        gameFrame.setLayout(new GridLayout(3, 3));
+        gameFrame.setSize(400, 450); // Slightly taller to fit label
+        gameFrame.setLayout(new BorderLayout());
         gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        // Turn label at the top
+        turnLabel = new JLabel("", SwingConstants.CENTER);
+        turnLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        gameFrame.add(turnLabel, BorderLayout.NORTH);
+
+        JPanel boardPanel = new JPanel(new GridLayout(3, 3));
         buttons = new JButton[3][3];
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
@@ -173,17 +189,22 @@ public class GameSelector extends JFrame {
                             game.makeMove(me, row, col);
                             btn.setText(me.getMark());
                             currentPlayer = opponent;
+                            updateTurnLabel();
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(gameFrame,
                                     "Fout bij verzenden van zet: " + ex.getMessage());
                         }
                     }
                 });
-                gameFrame.add(btn);
+                boardPanel.add(btn);
             }
         }
 
+        gameFrame.add(boardPanel, BorderLayout.CENTER);
         gameFrame.setLocationRelativeTo(null);
+
+        updateTurnLabel();
         gameFrame.setVisible(true);
     }
+
 }
