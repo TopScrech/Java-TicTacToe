@@ -1,5 +1,8 @@
 package classes;
 
+import nl.isy_games.Player;
+import nl.isy_games.TicTacToeGame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -7,7 +10,7 @@ import java.util.List;
 
 public class GameSelector extends JFrame {
 
-    private final GameClient client;
+    private final classes.GameClient client;
     private TicTacToeGame game;
     private Player me, opponent;
     private Player currentPlayer;
