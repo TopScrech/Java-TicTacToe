@@ -21,7 +21,7 @@ public class GameSelector extends JFrame {
 
     private boolean boardOpened = false;
 
-    public GameSelector(GameClient client) {
+    public GameSelector(classes.GameClient client) {
         this.client = client;
 
         setTitle("Game Selector");
